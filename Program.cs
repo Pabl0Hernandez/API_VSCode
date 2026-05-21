@@ -1,0 +1,32 @@
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
+using API_VSCode.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+    builder.Configuration.GetConnectionString("Default")));
+
+// Add services to the container.
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+// app.UseHttpsRedirection();
+
+app.MapGet("/", () => "API funcionando 🚀");
+
+app.MapControllers();
+
+app.Run();
