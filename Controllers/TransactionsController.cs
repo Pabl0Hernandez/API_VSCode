@@ -11,47 +11,47 @@ namespace API_VSCode.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProdutosController : ControllerBase
+    public class TransactionsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public ProdutosController(AppDbContext context)
+        public TransactionsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Produtos
+        // GET: api/Transactions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
-            return await _context.Produtos.ToListAsync();
+            return await _context.Transactions.ToListAsync();
         }
 
-        // GET: api/Produtos/5
+        // GET: api/Transactions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> GetProduto(int id)
+        public async Task<ActionResult<Transaction>> GetTransaction(Guid id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
+            var transaction = await _context.Transactions.FindAsync(id);
 
-            if (produto == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return produto;
+            return transaction;
         }
 
-        // PUT: api/Produtos/5
+        // PUT: api/Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduto(int id, Produto produto)
+        public async Task<IActionResult> PutTransaction(Guid id, Transaction transaction)
         {
-            if (id != produto.Id)
+            if (id != transaction.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(produto).State = EntityState.Modified;
+            _context.Entry(transaction).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace API_VSCode.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdutoExists(id))
+                if (!TransactionExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace API_VSCode.Controllers
             return NoContent();
         }
 
-        // POST: api/Produtos
+        // POST: api/Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Produto>> PostProduto(Produto produto)
+        public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
         {
-            _context.Produtos.Add(produto);
+            _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduto", new { id = produto.Id }, produto);
+            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 
-        // DELETE: api/Produtos/5
+        // DELETE: api/Transactions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduto(int id)
+        public async Task<IActionResult> DeleteTransaction(Guid id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
-            if (produto == null)
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            _context.Produtos.Remove(produto);
+            _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ProdutoExists(int id)
+        private bool TransactionExists(Guid id)
         {
-            return _context.Produtos.Any(e => e.Id == id);
+            return _context.Transactions.Any(e => e.Id == id);
         }
     }
 }
